@@ -6,6 +6,7 @@ from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.graphics import Color, Ellipse, Line
 from kivy.uix.scatter import Scatter
+from kivy.uix.behaviors import DragBehavior
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
 from random import randint
@@ -13,7 +14,7 @@ from kivy.properties import ListProperty
 from vpython import *
 
 
-class Star(Widget):
+class Star(DragBehavior, Widget):
     '''
         Have to implement Properties at class level. Not sure why I can't do this in the __init__ method?
     '''
@@ -24,6 +25,8 @@ class Star(Widget):
     momentum_x = NumericProperty(0)
     momentum_y = NumericProperty(0)
     momentum = ReferenceListProperty(momentum_x, momentum_y)
+    selected = BooleanProperty(False)
+
 
     '''
         Initializes the stars tracer
@@ -36,45 +39,39 @@ class Star(Widget):
             self.tracer = Line()
 
     '''
-        Adds a list of points (Line()) that traces the stars position
+        Adds a list of points (Line()) that traces the stars position. Deletes after a certain amount of points
     '''
     def add_tracer(self):
         self.tracer.points += self.center
+        if len(self.tracer.points) > 2500:
+            del self.tracer.points[0]
+            del self.tracer.points[0]
 
     def set_star_mass(self, mass):
         self.mass = mass
 
 
-class StarSystemGame(Widget):
+class StarSystemGame(Scatter):
     star0 = ObjectProperty(None)
     star1 = ObjectProperty(None)
     starList = ReferenceListProperty(star0, star1)
     scroll = BooleanProperty(False)
+    selected = BooleanProperty(False)
+    do_collide_after_children = False
+    auto_bring_to_front = True
+
 
 
     '''
         Edit the stars starting velocity, mass, etc.
     '''
     def starting_conditions(self):
-        self.star1.center = self.center
-        self.star1.momentum = Vector(3, 0).rotate(90)
         self.star0.center = self.center
+        self.star1.momentum = Vector(3, 0).rotate(90)
+        self.star1.center = self.center
         self.star0.momentum = Vector(3, 0).rotate(-90)
         self.star0.set_star_mass(20)
         self.star1.set_star_mass(20)
-
-
-
-    '''
-        When a widget is touched, the user can move the widget around
-    '''
-    def on_touch_move(self, touch):
-        with self.canvas:
-            for i in self.starList:
-                if i.x - 25 < touch.x < i.x + 25\
-                        and i.y - 25 < touch.y < i.y + 25:
-                    i.center = touch.x, touch.y
-
 
 
     '''

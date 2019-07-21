@@ -5,23 +5,16 @@
             rgb: (1,1,1)
         Ellipse:
             pos: self.pos
-            size: self.size          
+            size: self.size
 
 
 <StarSystemGame>:
     star0: star_0
     star1: star_1
-    layout: layout
 
     canvas:
         Color:
             rgb: (1,1,1)
-        Rectangle:
-            pos: 0, self.height / 10
-            size: self.width, 5
-
-    Scatter:
-        id: layout
 
     Star:
         id: star_0
@@ -32,3 +25,4 @@
         id: star_1
         x: self.parent.width * 2 / 3
         y: self.parent.height / 2
+
