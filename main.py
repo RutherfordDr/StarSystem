@@ -5,23 +5,27 @@ from kivy.properties import (NumericProperty, ReferenceListProperty, ObjectPrope
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.graphics import Color, Ellipse, Line
-from kivy.uix.scatter import Scatter
+from kivy.uix.scatter import Scatter, ScatterPlane
 from kivy.uix.behaviors import DragBehavior
+from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
+from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
 from random import randint
 from kivy.properties import ListProperty
 from vpython import *
+from kivy.lang import Builder
 
 
-class Star(DragBehavior, Widget):
+
+class Star(Widget):
     '''
         Have to implement Properties at class level. Not sure why I can't do this in the __init__ method?
     '''
     velocity_x = NumericProperty(0)
     velocity_y = NumericProperty(0)
     velocity = ReferenceListProperty(velocity_x, velocity_y)
-    mass = NumericProperty(0)
+    mass = NumericProperty(20)
     momentum_x = NumericProperty(0)
     momentum_y = NumericProperty(0)
     momentum = ReferenceListProperty(momentum_x, momentum_y)
@@ -33,7 +37,6 @@ class Star(DragBehavior, Widget):
     '''
     def __init__(self, **kwargs):
         super(Star, self).__init__(**kwargs)
-
         with self.canvas.before:
             Color(0, 0, 1)
             self.tracer = Line()
@@ -42,6 +45,7 @@ class Star(DragBehavior, Widget):
         Adds a list of points (Line()) that traces the stars position. Deletes after a certain amount of points
     '''
     def add_tracer(self):
+
         self.tracer.points += self.center
         if len(self.tracer.points) > 2500:
             del self.tracer.points[0]
@@ -49,6 +53,9 @@ class Star(DragBehavior, Widget):
 
     def set_star_mass(self, mass):
         self.mass = mass
+
+    def clear_tracer(self):
+        del self.tracer.points[:]
 
 
 class StarSystemGame(Scatter):
@@ -60,12 +67,17 @@ class StarSystemGame(Scatter):
     do_collide_after_children = False
     auto_bring_to_front = True
 
+    def __init__(self, *args, **kwargs):
+        super(StarSystemGame, self).__init__(*args, **kwargs)
+        Clock.schedule_interval(self.update, 1.0 / 60.0)
 
 
     '''
         Edit the stars starting velocity, mass, etc.
     '''
     def starting_conditions(self):
+        self.star0.clear_tracer()
+        self.star1.clear_tracer()
         self.star0.center = self.center
         self.star1.momentum = Vector(3, 0).rotate(90)
         self.star1.center = self.center
@@ -109,12 +121,15 @@ class StarSystemGame(Scatter):
                 i.add_tracer()
 
 
+class Manager(ScreenManager):
+    pass
+
+
 class StarSystemApp(App):
+
     def build(self):
-        game = StarSystemGame()
-        game.starting_conditions()
-        Clock.schedule_interval(game.update, 1.0 / 60.0)
-        return game
+
+        return Manager(transition=NoTransition())
 
 
 if __name__ == '__main__':
