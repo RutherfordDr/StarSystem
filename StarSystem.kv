@@ -1,32 +1,66 @@
 <Manager>:
     id: screen_manager
 
-    Screen:
+    MenuScreen:
+        id: menu_screen
         name: 'home'
-        Button:
-            text: 'Enter FreePlay'
-            halign: 'center'
-            valign: 'middle'
-            font_size: 20
-            text_size: self.size
-            on_release: root.current = 'game';game.starting_conditions()
-            size: 200, 100
-            size_hint: None, None
-            center: root.center
+        manager: 'screen_manager'
+        RelativeLayout:
+            Button:
+                text: 'Enter FreePlay'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'game';game.starting_conditions()
+                size: 200, 100
+                size_hint: None, None
+                center: self.parent.center
 
-
-    Screen:
+    FreePlayScreen:
+        id: free_play_screen
+        control: control
         name: 'game'
+        manager: 'screen_manager'
         StarSystemGame:
             id: game
-        Button:
-            text: 'Add Star'
-            halign: 'center'
-            valign: 'middle'
-            font_size: 12
-            text_size: self.size
-            size: 100, 50
-            size_hint: None, None
+        BoxLayout:
+            id: control
+            Button:
+                id: button_add
+                text: 'Add Star'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.create_star()
+                size: self.parent.width / 3, 50
+                size_hint: None, None
+            Button:
+                id: button_adjust_time
+                text: 'Adjust time'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.adjust_time()
+                size: self.parent.width / 3, 50
+                size_hint: None, None
+            Button:
+                id: button_remove
+                text: 'Remove Star'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.remove_star()
+                size: self.parent.width / 3, 50
+                size_hint: None, None
+
+
+<MenuScreen>
+
+<FreePlayScreen>
 
 
 <Star>:
@@ -43,17 +77,21 @@
     star0: star_0
     star1: star_1
 
+
+
     canvas:
         Color:
             rgb: (1,1,1)
 
+
     Star:
         id: star_0
-        x: self.parent.width / 3
-        y: self.parent.height / 2
+
 
     Star:
         id: star_1
-        x: self.parent.width * 2 / 3
-        y: self.parent.height / 2
+
+
+
+
 
