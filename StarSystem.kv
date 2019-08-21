@@ -5,37 +5,73 @@
         id: menu_screen
         name: 'home'
         manager: 'screen_manager'
-        RelativeLayout:
+
+        BoxLayout:
+            size_hint: None, None
+            size: 600, 200
+            center: root.center
+            orientation: 'vertical'
+            spacing: 2
+
             Button:
                 text: 'Enter FreePlay'
                 halign: 'center'
                 valign: 'middle'
                 font_size: 20
                 text_size: self.size
-                on_release: root.current = 'game';game.starting_conditions()
-                size: 200, 100
-                size_hint: None, None
-                center: self.parent.center
+                on_release: root.current = 'game'
+
+
+            Button:
+                text: 'Simulations'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'simulation'
+
+            Button:
+                text: 'About'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'about'
+
+
 
     FreePlayScreen:
         id: free_play_screen
-        control: control
         name: 'game'
         manager: 'screen_manager'
         StarSystemGame:
             id: game
+            center: self.parent.center
+
         BoxLayout:
-            id: control
+            size_hint: None, None
+            size: 600, self.parent.height / 20
+            center_x: root.center_x
+            orientation: 'horizontal'
+
             Button:
                 id: button_add
-                text: 'Add Star'
+                text: 'Add Object'
                 halign: 'center'
                 valign: 'middle'
                 font_size: 20
                 text_size: self.size
                 on_release: game.create_star()
-                size: self.parent.width / 3, 50
-                size_hint: None, None
+
+            Button:
+                id: button_remove
+                text: 'Remove Object'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.remove_star()
+
             Button:
                 id: button_adjust_time
                 text: 'Adjust time'
@@ -44,27 +80,113 @@
                 font_size: 20
                 text_size: self.size
                 on_release: game.adjust_time()
-                size: self.parent.width / 3, 50
-                size_hint: None, None
+
             Button:
-                id: button_remove
-                text: 'Remove Star'
+                id: button_toggle_pause
+                text: 'Start/Pause'
                 halign: 'center'
                 valign: 'middle'
                 font_size: 20
                 text_size: self.size
-                on_release: game.remove_star()
-                size: self.parent.width / 3, 50
+                on_release: game.toggle_pause()
+
+
+    SimulationScreen:
+        id: simulation_screen
+        name: 'simulation'
+        manager: 'screen_manager'
+
+
+        BoxLayout:
+            size_hint: None, None
+            size: 400, 200
+            center: root.center
+            orientation: 'vertical'
+            spacing: 2
+
+            Button:
+                bold: True
+                color: 0, 0, 1, 1
+                text: 'Main Menu'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'home'
+
+            Button:
+                text: 'Binary Star System'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'game';game.binary_star_starting_conditions()
+
+            Button:
+                text: 'Trinary Star System'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'game';game.trinary_star_starting_conditions()
+
+            Button:
+                text: 'Earth, moon, Sun - like System'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'game';game.earth_moon_sun_starting_conditions()
+
+            Button:
+                text: 'Saturn\'s Moons System'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'game';game.saturns_moons_starting_conditions()
+
+            Button:
+                text: 'Simple Solar System'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: root.current = 'game';game.solar_system_starting_conditions()
+
+
+    AboutScreen:
+        id: about_screen
+        name: 'about'
+        manager: 'screen_manager'
+
+        FloatLayout:
+
+
+            Spinner:
+                id: my_spinner
                 size_hint: None, None
+                size: 100, 44
+                pos_hint: {'center': (.5, .5)}
+                text: 'Home'
+                values: 'Home', 'Work', 'Other', 'Custom'
+                on_text: if my_spinner.text == "Work": root.current = 'game';game.solar_system_starting_conditions()
 
 
 <MenuScreen>
 
 <FreePlayScreen>
 
+<SimulationScreen>
+
+<AboutScreen>
+
+
+
 
 <Star>:
     size: 25, 25
+
     canvas:
         Color:
             rgb: (1,1,1)
@@ -73,25 +195,30 @@
             size: self.size
 
 
+
+<Planet>:
+    size: 10, 10
+    canvas:
+        Color:
+            rgb: (0, 0 ,1)
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
+<Moon>:
+    size: 2, 2
+    canvas:
+        Color:
+            rgb: (192, 192 ,192)
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
+
 <StarSystemGame>:
-    star0: star_0
-    star1: star_1
-
-
 
     canvas:
         Color:
             rgb: (1,1,1)
 
-
-    Star:
-        id: star_0
-
-
-    Star:
-        id: star_1
-
-
-
-
-
+       
