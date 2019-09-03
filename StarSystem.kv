@@ -38,12 +38,21 @@
                 text_size: self.size
                 on_release: root.current = 'about'
 
+            Button:
+                text: 'Quit'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: app.stop()
+
 
 
     FreePlayScreen:
         id: free_play_screen
         name: 'game'
         manager: 'screen_manager'
+
         StarSystemGame:
             id: game
             center: self.parent.center
@@ -73,15 +82,6 @@
                 on_release: game.remove_star()
 
             Button:
-                id: button_adjust_time
-                text: 'Adjust time'
-                halign: 'center'
-                valign: 'middle'
-                font_size: 20
-                text_size: self.size
-                on_release: game.adjust_time()
-
-            Button:
                 id: button_toggle_pause
                 text: 'Start/Pause'
                 halign: 'center'
@@ -90,6 +90,22 @@
                 text_size: self.size
                 on_release: game.toggle_pause()
 
+
+
+        AnchorLayout:
+            anchor_x: 'left'
+            anchor_y: 'top'
+
+            Button:
+                id: button_menu
+                size_hint: None, None
+                text: 'Main Menu'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                size: 150, self.parent.height / 20
+                on_release: root.current = 'home'; game.end_game()
 
     SimulationScreen:
         id: simulation_screen
@@ -162,6 +178,11 @@
 
         FloatLayout:
 
+            TextInput:
+                size_hint: None, None
+                size: 100, 44
+                pos_hint: {'center': (.25, .5)}
+                text: 'Home'
 
             Spinner:
                 id: my_spinner
@@ -216,9 +237,9 @@
 
 
 <StarSystemGame>:
-
+    size_hint: None, None
+    size: 20000, 20000
     canvas:
         Color:
             rgb: (1,1,1)
 
-       
