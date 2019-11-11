@@ -53,9 +53,52 @@
         name: 'game'
         manager: 'screen_manager'
 
+
         StarSystemGame:
             id: game
             center: self.parent.center
+
+        BoxLayout:
+            id: add_options
+            size_hint: None, None
+            size: 400, self.parent.height / 20
+            center_x: root.center_x - 200
+            center_y: root.center_y / 6.5
+            orientation: 'horizontal'
+            disabled: True
+            opacity: 0
+            Button:
+                id: star
+                text: 'Star'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.create_object('star')
+                on_release: add_options.disabled = True
+                on_release: add_options.opacity = 0
+            Button:
+                id: planet
+                text: 'Planet'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.create_object('planet')
+                on_release: add_options.disabled = True
+                on_release: add_options.opacity = 0
+
+            Button:
+                id: moon
+                text: 'Moon'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                on_release: game.create_object('moon')
+                on_release: add_options.disabled = True
+                on_release: add_options.opacity = 0
+
 
         BoxLayout:
             size_hint: None, None
@@ -70,8 +113,8 @@
                 valign: 'middle'
                 font_size: 20
                 text_size: self.size
-                on_release: game.create_star()
-
+                on_release: add_options.disabled = False
+                on_release: add_options.opacity =100
             Button:
                 id: button_remove
                 text: 'Remove Object'
@@ -105,7 +148,7 @@
                 font_size: 20
                 text_size: self.size
                 size: 150, self.parent.height / 20
-                on_release: root.current = 'home'; game.end_game()
+                on_release: if game.clear: root.current = 'home'; game.end_game()
 
     SimulationScreen:
         id: simulation_screen
@@ -155,12 +198,12 @@
                 on_release: root.current = 'game';game.earth_moon_sun_starting_conditions()
 
             Button:
-                text: 'Saturn\'s Moons System'
+                text: 'Jupiter\'s Moons System'
                 halign: 'center'
                 valign: 'middle'
                 font_size: 20
                 text_size: self.size
-                on_release: root.current = 'game';game.saturns_moons_starting_conditions()
+                on_release: root.current = 'game';game.jupiters_moons_starting_conditions()
 
             Button:
                 text: 'Simple Solar System'
@@ -176,23 +219,27 @@
         name: 'about'
         manager: 'screen_manager'
 
-        FloatLayout:
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'top'
 
-            TextInput:
+            Button:
+                id: button_menu
                 size_hint: None, None
-                size: 100, 44
-                pos_hint: {'center': (.25, .5)}
-                text: 'Home'
-
-            Spinner:
-                id: my_spinner
-                size_hint: None, None
-                size: 100, 44
-                pos_hint: {'center': (.5, .5)}
-                text: 'Home'
-                values: 'Home', 'Work', 'Other', 'Custom'
-                on_text: if my_spinner.text == "Work": root.current = 'game';game.solar_system_starting_conditions()
-
+                text: 'Main Menu'
+                halign: 'center'
+                valign: 'middle'
+                font_size: 20
+                text_size: self.size
+                size: 150, self.parent.height / 20
+                on_release: if game.clear: root.current = 'home'
+        Label:
+            id: about_label
+            multiline: True
+            size_hint: 1, 1.2
+            text_size: 600, 300
+            height: self.texture_size[1]
+            text: "Welcome to StarSystem game which is a physics simulator for stars, moons, and planets of various masses. There are various simulations which attempt to demonstrate some systems in our solar system and galaxy. The mass of each object is relative to Earth's mass, meaning that a mass of 1 would be 1 Earth mass, and a mass of 4 would be 4x Earth's mass.\nControls:\n    Click and drag to translate\n    Right click and then left click and drag to rotate/scale\n\nThis is a personal project to demonstrate my knowledge in OOP programming in Python, and the use of Kivy. In the future I would like to move away from the Kivy code, and switch it all to Python code. There are some bugs I am aware of, but this is still a work in progress. This is the first version of the game that I have got to be in a playable state."
 
 <MenuScreen>
 
