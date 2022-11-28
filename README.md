@@ -1,4 +1,4 @@
-"Welcome to StarSystem game which is a physics simulator for stars, moons, and planets of various masses. There are many simulations
+"Welcome to the star system n-body simulator which is a physics simulator for stars, moons, and planets of various masses. There are many simulations
 which attempt to demonstrate some systems in our solar system and galaxy. The mass of each object is relative to Earth's mass, meaning that a mass of 1 would be 1 Earth mass, and a mass of 4 would be 4x Earth's mass.
 
 Controls:    
